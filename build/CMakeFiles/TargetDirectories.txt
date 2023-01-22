@@ -1,0 +1,3 @@
+/home/hczm/XFtpServer/build/CMakeFiles/rebuild_cache.dir
+/home/hczm/XFtpServer/build/CMakeFiles/XFtpServer.dir
+/home/hczm/XFtpServer/build/CMakeFiles/edit_cache.dir
