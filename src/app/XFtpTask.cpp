@@ -79,3 +79,24 @@ void XFtpTask::EventCB(struct bufferevent* bev, short what, void* arg)
 	XFtpTask* t = (XFtpTask*)arg;
 	t->Event(bev, what);
 }
+std::string XFtpTask::GetListData(std::string path) {
+	string data = "";
+
+	string cmd = "ls -l ";
+	cmd += path;
+	std::cout << "popen:" << cmd << std::endl;
+	FILE* f = popen(cmd.c_str(), "r");
+	if (!f)
+		return data;
+	char buffer[1024] = { 0 };
+	for (;;)
+	{
+		int len = fread(buffer, 1, sizeof(buffer) - 1, f);
+		if (len <= 0)break;
+		buffer[len] = '\0';
+		data += buffer;
+	}
+	pclose(f);
+	
+	return data;
+}

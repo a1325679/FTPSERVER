@@ -105,16 +105,11 @@ bool XFtpServerCMD::Init()
 	}
 	this->bev = bev;
 	this->SetCallback(bev);
-	std::cout << "sock is " << sock << std::endl;
 	// 添加超时
 	timeval rt = {60, 0};
 	bufferevent_set_timeouts(bev, &rt, 0);
 	string msg = "220 Welcome to libevent XFtpServer\r\n";
 	int ret = bufferevent_write(bev, msg.c_str(), msg.size());
-	if (ret == 0)
-	{
-		std::cout << "bufferveent_write" << std::endl;
-	}
 	return true;
 }
 

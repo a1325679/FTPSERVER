@@ -22,6 +22,8 @@ using namespace std;
 
 #define SPORT 9090
 ThreadPool pool;
+
+
 void listen_cb(struct evconnlistener *e, evutil_socket_t s, struct sockaddr *a, int socklen, void *arg)
 {
 	cout << "listen_cb" << endl;
@@ -33,14 +35,14 @@ void listen_cb(struct evconnlistener *e, evutil_socket_t s, struct sockaddr *a, 
 }
 
 
-void TestThread()
-{
-	for (;;)
-	{
-		bool ret = XLOG::GetInstance()->Log(STDERR, "Thread Id is %d", this_thread::get_id());
-		usleep(500 * 100);
-	}
-}
+// void TestThread()
+// {
+// 	for (;;)
+// 	{
+// 		bool ret = XLOG::GetInstance()->Log(STDERR, "Thread Id is %d", this_thread::get_id());
+// 		usleep(500 * 100);
+// 	}
+// }
 int main()
 {
 	std::cout << "test thread pool!\n";
@@ -64,8 +66,6 @@ int main()
 
 	//Log日志初始化
 	XLOG::GetInstance()->Init("error.log");
-	pool.submitTask(&XLOG::PrintLogsThread,XLOG::GetInstance());
-	pool.submitTask(TestThread);
 
 	// 监听端口
 	// socket ，bind，listen 绑定事件
