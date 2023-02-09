@@ -23,7 +23,6 @@ using namespace std;
 #define SPORT 9090
 ThreadPool pool;
 
-
 void listen_cb(struct evconnlistener *e, evutil_socket_t s, struct sockaddr *a, int socklen, void *arg)
 {
 	cout << "listen_cb" << endl;
@@ -34,18 +33,8 @@ void listen_cb(struct evconnlistener *e, evutil_socket_t s, struct sockaddr *a, 
 	task->Init();
 }
 
-
-// void TestThread()
-// {
-// 	for (;;)
-// 	{
-// 		bool ret = XLOG::GetInstance()->Log(STDERR, "Thread Id is %d", this_thread::get_id());
-// 		usleep(500 * 100);
-// 	}
-// }
 int main()
 {
-	std::cout << "test thread pool!\n";
 	pool.start(3);
 	// pool.setMode(PoolMode::MODE_CACHED);
 	// 创建libevent的上下文
@@ -56,16 +45,15 @@ int main()
 	}
 
 	XConfig *p_config = XConfig::GetInstance(); // 单例类
-	if (p_config->Load("conf.conf") == false)	// 把配置文件内容载入到内存
+	if (p_config->Load("conf.conf") == false)		// 把配置文件内容载入到内存
 	{
 		std::cout << "XConfig Load Failed!" << std::endl;
 	}
-	unsigned short port = p_config->GetIntDefault("ListenPort0",9090);
-	std::cout << "port is " << port << std::endl;
 
-
-	//Log日志初始化
 	XLOG::GetInstance()->Init("error.log");
+	pool.submitTask(XLOG::PrintLogsThread, XLOG::GetInstance());
+
+	unsigned short port = p_config->GetIntDefault("ListenPort0", 9090);
 
 	// 监听端口
 	// socket ，bind，listen 绑定事件
@@ -80,7 +68,8 @@ int main()
 																							 10,																				// 连接队列大小，对应listen函数
 																							 (sockaddr *)&sin,													// 绑定的地址和端口
 																							 sizeof(sin));
-	
+
+	log(5, "Ftp Server start in %d",port);
 	// 事件分发处理
 	if (base)
 	{

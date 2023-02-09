@@ -28,7 +28,20 @@ public:
 		return fd;
 	}
 
+	class CGarge{
+		public:
+			CGarge()
+			{
+
+			}
+			~CGarge()
+			{
+				delete m_instance;
+			}
+	};
+
 private:
+	CGarge cg;
 	XLOG();
 	static XLOG *m_instance;
 	std::list<std::string> message_queue;

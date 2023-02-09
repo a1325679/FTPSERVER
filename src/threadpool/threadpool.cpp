@@ -101,9 +101,6 @@ void ThreadPool::threadFunc(int threadid)
 			// cached模式下，有可能已经创建了很多的线程，但是空闲时间超过60s，应该把多余的线程
 			// 结束回收掉（超过initThreadSize_数量的线程要进行回收）
 			// 当前时间 - 上一次线程执行的时间 > 60s
-
-			// 每一秒中返回一次   怎么区分：超时返回？还是有任务待执行返回
-			// 锁 + 双重判断
 			while (taskQue_.size() == 0)
 			{
 				// 线程池要结束，回收线程资源
@@ -126,10 +123,6 @@ void ThreadPool::threadFunc(int threadid)
 						auto dur = std::chrono::duration_cast<std::chrono::seconds>(now - lastTime);
 						if (dur.count() >= THREAD_MAX_IDLE_TIME && curThreadSize_ > initThreadSize_)
 						{
-							// 开始回收当前线程
-							// 记录线程数量的相关变量的值修改
-							// 把线程对象从线程列表容器中删除   没有办法 threadFunc《=》thread对象
-							// threadid => thread对象 => 删除
 							threads_.erase(threadid); // std::this_thread::getid()
 							curThreadSize_--;
 							idleThreadSize_--;

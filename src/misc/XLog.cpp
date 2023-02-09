@@ -80,7 +80,7 @@ bool XLOG::Log(int level, const char *fmt, ...)
 	vsprintf(errstr, fmt, args);
 	va_end(args);
 	str += errstr;
-	if(level ==  0)
+	if (level == 0)
 	{
 		std::cout << str << std::endl;
 		return true;
@@ -91,6 +91,7 @@ bool XLOG::Log(int level, const char *fmt, ...)
 	}
 	return true;
 }
+
 void XLOG::PrintLogsThread(void *args)
 {
 	XLOG *t = (XLOG *)args;
@@ -102,12 +103,19 @@ void XLOG::PrintLogsThread(void *args)
 		}
 		else
 		{
+			std::cout << "helloworld" << std::endl;
 			fputs(t->GetMessageQueueFrontElement().c_str(), t->GetFd());
+			fflush(t->GetFd());
 		}
 	}
 }
 XLOG::~XLOG()
 {
+	while (message_queue.empty())
+	{
+		fputs(GetMessageQueueFrontElement().c_str(), GetFd());
+	}
+	fclose(fd);
 }
 XLOG::XLOG()
 {

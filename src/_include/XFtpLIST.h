@@ -7,5 +7,7 @@ class XFtpLIST:public XFtpTask
 		virtual void Parse(std::string type, std::string msg);
 		virtual void Write(struct bufferevent *bev);
 		virtual void Event(struct bufferevent *bev,short what);
+		void WriteWork(struct bufferevent *bev);
+		void EventWork(struct bufferevent *bev, short what);
 };
 #endif
